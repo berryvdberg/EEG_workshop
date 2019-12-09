@@ -6,7 +6,7 @@ RUN.datapath = fullfile(RUN.rootpath,'data');
 cd(RUN.rootpath);
 b=2;
 RUN.b = b;
-
+% hey marlon, hieronder ben ik nog wat onzeker over XYZ
 
 a =1;
 plosOne(a)
