@@ -4,6 +4,7 @@
 %                      berryv.dberg@gmail.com
 %------------------------------------------------------------------------%
 
+set(0,'DefaultFigureColormap',feval('jet'));
 close all;clear all;clc;
 restoredefaultpath;
 set(0,'defaultuicontrolfontname','Arial');
