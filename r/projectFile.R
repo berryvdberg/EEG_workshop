@@ -49,74 +49,21 @@ mPooled <-lm(reactionTime ~ factor(cueType), modData[cueType != 6 & reactionTime
 summary(mPooled)
 
 
-
-
-
-
 ### RTS ---- PARTIAL POOLED -----
 mPartialPooled <-lmer(reactionTime ~ as.factor(cueType) + (1|subjectID), 
-          data = modData[cueType != 6 & reactionTime >100 & reactionTime < 1200 & responseType %in% 3:4]) 
+          data = modData[artThresh == 0 & cueType != 6 & reactionTime >100 & reactionTime < 1200 & responseType %in% 3:4]) 
 
 
 summary(mPartialPooled)
 ranef(mPartialPooled)
 
-mPartialPooled <-lmer(reactionTime ~ as.factor(cueType) + (1|subjectID) + (0+as.factor(cueType)|subjectID), 
+mPartialPooled <-lmer(reactionTime ~ as.factor(cueType) + (1|subjectID) + (0+cueType|subjectID), 
                       data = modData[cueType != 6 & reactionTime >100 & reactionTime < 1200 & responseType %in% 3:4 ]) 
 summary(mPartialPooled)
 ranef(mPartialPooled)
-
-###
-mPartialPooled <-lmer(reactionTime ~ as.factor(cueType) * poly(trialNumber,2) + (1|subjectID), 
-                      data = modData[cueType != 6 & reactionTime >100 & reactionTime < 1200 & responseType %in% 3:4 ]) 
-summary(mPartialPooled)
-
 
 ## lets construct polynomials... 
-plot(poly(1:100,11)[,11],type = 'l')
-
-
-
-emmeans(mPooled, ~ cueType)
-### RTS ---- PARTIAL POOLED -----
-mPartialPooled <-lmer(reactionTime ~ as.factor(cueType) + (1|subjectID), 
-                      data = modData[cueType != 6 & reactionTime >100 & reactionTime < 1200 & responseType %in% 3:4]) 
-
-modData$targetType <- as.factor(modData$targetType)
-mPartialPooled <-lmer(CNV ~ as.factor(cueType) + (1|subjectID), 
-                      data = modData[cueType != 6 & artThresh  == 0 & responseType  %in% 3:4]) 
-summary(mPartialPooled)
-
-
-
-#### 
-require(data.table)
-require(lme4)
-require(emmeans)
-require(ggplot2)
-
-
-modDat<- data.table(datLar)
-modDat <- modDat[response != 'none' & subName != 'c172',.(prop.win = sum(choiceWin == 1)/length(choiceWin)),.(subName,trialNR,blockProb )]
-modDat[,.(prop.win = mean(prop.win)),.(trialNR,blockProb )]
-ggplot(modDat[,.(prop.win = mean(prop.win)),.(trialNR,blockProb)],aes(x = trialNR,y = prop.win,colour = blockProb, group = blockProb))+
-  geom_point()
-
-
-m1 <- lmer(data = modDat, prop.win ~ poly(trialNR,2) * blockProb + 
-             (1|subName) +
-             (0+trialNR|subName))
-m2 <- lmer(data = modDat, prop.win ~ poly(trialNR,2) * blockProb + 
-             (1|subName) +
-             (0+trialNR|subName))
-anova(m1,m2) # m1 wins
-
-
-emmeans(m1, ~ trialNR, at = list(trialNR = 1:20))
-
-
-
-
+plot(poly(1:100,11)[,2],type = 'l')
 
 
 
